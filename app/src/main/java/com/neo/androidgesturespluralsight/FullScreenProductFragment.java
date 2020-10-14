@@ -1,0 +1,97 @@
+package com.neo.androidgesturespluralsight;
+
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.neo.androidgesturespluralsight.customviews.ScalingImageView;
+import com.neo.androidgesturespluralsight.models.Product;
+
+/**
+ * Created by User on 3/3/2018.
+ */
+
+public class FullScreenProductFragment extends Fragment
+
+{
+
+    private static final String TAG = "FullScreenProductFragme";
+
+    //widgets
+    private ScalingImageView mImageView;
+
+    //vars
+    public Product mProduct;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = this.getArguments();
+
+        if(bundle != null){
+            mProduct = bundle.getParcelable(getString(R.string.intent_product));
+        }
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_full_screen_product, container, false);
+        mImageView = view.findViewById(R.id.image);
+
+        setProduct();
+
+        return view;
+    }
+
+    /*
+        method sets the image in the placeholder
+     */
+    private void setProduct(){
+        RequestOptions requestOptions = new RequestOptions()
+                .placeholder(R.drawable.ic_launcher_background);
+
+        Glide.with(getActivity())
+                .setDefaultRequestOptions(requestOptions)
+                .load(mProduct.getImage())
+                .into(mImageView);
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
