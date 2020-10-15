@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.neo.androidgesturespluralsight.CartRecyclerViewAdapter;
 
-/**
- * Created by User on 3/5/2018.
- */
 
+/**
+ * Item Touch Helper callBack class to help move and swipe items in rv
+ */
 public class CartItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     private final ItemTouchHelperAdapter mAdapter;
@@ -23,11 +23,13 @@ public class CartItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean isLongPressDragEnabled() {
+        // enables rv list items to be dragged
         return false;
     }
 
     @Override
     public boolean isItemViewSwipeEnabled() {
+        // enables list items to be Swipeable
         return true;
     }
 
@@ -39,7 +41,7 @@ public class CartItemTouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
     @Override
-    public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {  // when item is dragged
+    public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {   // when item is dragged
         super.onSelectedChanged(viewHolder, actionState);
         if(actionState == ItemTouchHelper.ACTION_STATE_DRAG){
             viewHolder.itemView.setBackgroundColor(Color.RED);
@@ -48,6 +50,7 @@ public class CartItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        // used to set the movement flags of the View Holder(layout item)
         if (viewHolder instanceof CartRecyclerViewAdapter.SectionHeaderViewHolder) {
             return 0;
         }
@@ -58,11 +61,13 @@ public class CartItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+        // called when a list item is swiped
         mAdapter.onItemSwiped(viewHolder.getAdapterPosition());
     }
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+        // called when an item is moved in the rv
         mAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }

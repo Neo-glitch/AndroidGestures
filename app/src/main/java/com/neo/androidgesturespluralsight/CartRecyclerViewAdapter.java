@@ -25,13 +25,15 @@ import com.neo.androidgesturespluralsight.util.CartManger;
 
 import java.util.ArrayList;
 
+
+
 public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements
         ItemTouchHelperAdapter,
         GestureDetector.OnGestureListener
 {
-
     private static final String TAG = "CartRecyclerViewAd";
 
+    // used to det which layout to inflate in onCreateViewHolder
     private static final int PRODUCT_TYPE = 1;
     private static final int HEADER_TYPE = 2;
 
@@ -85,9 +87,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             ((ViewHolder)holder).parentView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-
                     ((ViewCartActivity)mContext).setIsScrolling(false);
-
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
                         mSelectedHolder = ((ViewHolder)holder);
                         mGestureDetector.onTouchEvent(event);
@@ -111,7 +111,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     @Override
-    public int getItemViewType(int position) {          // ret the int view type to OnCreateView Holder
+    public int getItemViewType(int position) {          // ret the int ViewHolder view type to OnCreateView Holder
         if(TextUtils.isEmpty(mProducts.get(position).getType())){
             return HEADER_TYPE;
         }
@@ -120,9 +120,13 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
+    /*
+    ItemTouchHelper Adapter implemented by us
+     */
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
-        // gets product using "fromPosition" and assigns a new place in the product list using same product
+        // gets a product using a from pos, create a new product using that product,
+        // remove from list and add product to "toPosition" and notify adapter
         Product fromProduct = mProducts.get(fromPosition);
         Product product = new Product(fromProduct);
         mProducts.remove(fromPosition);
@@ -141,11 +145,13 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     public void setTouchHelper(ItemTouchHelper touchHelper) {
-
         mTouchHelper = touchHelper;
     }
 
 
+    /*
+    Gesture Detector
+     */
     @Override
     public boolean onDown(MotionEvent motionEvent) {
         return false;
@@ -177,6 +183,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
         return false;
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

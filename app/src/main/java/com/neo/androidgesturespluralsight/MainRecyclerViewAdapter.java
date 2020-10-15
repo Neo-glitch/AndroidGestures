@@ -47,6 +47,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                 .load(mProducts.get(position).getImage())
                 .into(holder.image);
 
+        // best practice is to set the OnLickListener in the custom ViewHolder class
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -25,11 +25,10 @@ import com.neo.androidgesturespluralsight.util.CartManger;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+
 /**
- * Created by User on 3/4/2018.
+ * activity that holds list of items added to cart in Rv
  */
-
-
 public class ViewCartActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "ViewCartActivity";
@@ -41,7 +40,7 @@ public class ViewCartActivity extends AppCompatActivity implements View.OnClickL
     //vars
     CartRecyclerViewAdapter mAdapter;
     private ArrayList<Product> mProducts = new ArrayList<>();
-    private boolean mIsScrolling;
+    private boolean mIsScrolling;     // true when list is scrolling i.e we are scrolling rv
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,14 +71,14 @@ public class ViewCartActivity extends AppCompatActivity implements View.OnClickL
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
 
+        // setup to use item touch helper for rv
         ItemTouchHelper.Callback callback = new CartItemTouchHelperCallback(mAdapter);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         mAdapter.setTouchHelper(itemTouchHelper);
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
-
         mRecyclerView.setAdapter(mAdapter);
 
-        //wait for the recyclerview to finish loading the views
+        //wait for the layout and recyclerview to finish loading the views
         mRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -94,6 +93,9 @@ public class ViewCartActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
+    /**
+     * fun used to show or hide fab
+     */
     private void setFABVisibility(boolean isVisible){
         Animation animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_out);
         Animation animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_in);
@@ -125,12 +127,13 @@ public class ViewCartActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-
         if(view.getId() == R.id.fab){
-            mRecyclerView.smoothScrollToPosition(0);  // scrolls the RecyView to the first pos
+            mRecyclerView.smoothScrollToPosition(0);  // scrolls the RV to the first pos
         }
     }
 
+
+    // custom cartScroll listener class
     class CartScrollListener extends RecyclerView.OnScrollListener{
 
         @Override
@@ -151,9 +154,8 @@ public class ViewCartActivity extends AppCompatActivity implements View.OnClickL
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-
-            if(isRecyclerScrollable()){  // true if recyView has reached end of list
-                if(!recyclerView.canScrollVertically(1)){
+            if(isRecyclerScrollable()){
+                if(!recyclerView.canScrollVertically(1)){   // true if Rv can be scrolled downwards
                     setFABVisibility(true);
                 }
                 else{

@@ -33,15 +33,14 @@ import com.neo.androidgesturespluralsight.util.CartManger;
 import java.util.ArrayList;
 
 /**
- * Created by User on 3/3/2018.
+ * Activity with swipeable images in a ViewPager
  */
-
 public class ViewProductActivity extends AppCompatActivity implements
-        View.OnTouchListener,
+        View.OnTouchListener,   // to detect the touch
         View.OnClickListener,
-        GestureDetector.OnGestureListener,
-        GestureDetector.OnDoubleTapListener,
-        View.OnDragListener{
+        GestureDetector.OnGestureListener,   // to determine the gesture
+        GestureDetector.OnDoubleTapListener,  // to det doubleTap gesture
+        View.OnDragListener{                    // to det drag gesture
 
     private static final String TAG = "ViewProductActivity";
 
@@ -90,9 +89,9 @@ public class ViewProductActivity extends AppCompatActivity implements
     private void initPagerAdapter(){
         ArrayList<Fragment> fragments = new ArrayList<>();
         Products products = new Products();
-        Product[] selectedProducts = products.PRODUCT_MAP.get(mProduct.getType());
+        Product[] selectedProducts = products.PRODUCT_MAP.get(mProduct.getType());   // gets list of product obj variations of product passed from MainActivity
         for(Product product: selectedProducts){
-            // loops trough each product variation and adds it to the fragment list bundles.
+            // add each product var obj to the fragment list bundles.
             Bundle bundle = new Bundle();
             bundle.putParcelable(getString(R.string.intent_product), product);
             ViewProductFragment viewProductFragment = new ViewProductFragment();
@@ -105,9 +104,12 @@ public class ViewProductActivity extends AppCompatActivity implements
         mTabLayout.setupWithViewPager(mProductContainer, true);
     }
 
+    /**
+     * fun used to set a rect area, that will be used to know if shadow being dragged is in that area
+     */
     private void getCartPosition(){
         mCartPositionRectangle = new Rect();
-        mCart.getGlobalVisibleRect(mCartPositionRectangle);
+        mCart.getGlobalVisibleRect(mCartPositionRectangle);  // defines where the rect will stay on screen, i.e where the mCart View is
 
         // gets width of the app screen
         Display display = getWindowManager().getDefaultDisplay();
@@ -138,7 +140,9 @@ public class ViewProductActivity extends AppCompatActivity implements
     }
 
     private void addCurrentItemToCart(){
-        Product selectedProduct = ((ViewProductFragment)mPagerAdapter.getItem(mProductContainer.getCurrentItem())).mProduct;   // gets the product variation obj in viewPager View
+        // gets the product variation obj in viewPager View from the fragment inView
+        Product selectedProduct = ((ViewProductFragment)mPagerAdapter.getItem(mProductContainer.getCurrentItem())).mProduct;
+
         CartManger cartManger = new CartManger(this);
         cartManger.addItemToCart(selectedProduct);
         Toast.makeText(this, "added to cart", Toast.LENGTH_SHORT).show();
@@ -228,7 +232,6 @@ public class ViewProductActivity extends AppCompatActivity implements
     /*
         GestureDetector
      */
-
     @Override
     public boolean onDown(MotionEvent motionEvent) {
         Log.d(TAG, "onDown: called");
@@ -283,9 +286,8 @@ public class ViewProductActivity extends AppCompatActivity implements
     }
 
     /*
-        DoubleTap
+        DoubleTap(gesture detector auto associate with this, if the event in this interface fun() occurs)
      */
-
     @Override
     public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
         Log.d(TAG, "onSingleTapConfirmed: called.");
@@ -315,21 +317,17 @@ public class ViewProductActivity extends AppCompatActivity implements
 
             case DragEvent.ACTION_DRAG_STARTED:
                 Log.d(TAG, "onDrag: drag started.");
-
                 setDragMode(true);
-
                 return true;
 
             case DragEvent.ACTION_DRAG_ENTERED:
 
                 return true;
 
-            case DragEvent.ACTION_DRAG_LOCATION:
-
+            case DragEvent.ACTION_DRAG_LOCATION:   // triggered when drag shadow is constantly moving the the bonding box
                 Point currentPoint = new Point(Math.round(event.getX()), Math.round(event.getY()));
-//                Log.d(TAG, "onDrag: x: " + currentPoint.x + ", y: " + currentPoint.y );
-
                 if(mCartPositionRectangle.contains(currentPoint.x, currentPoint.y)){
+                    // if drag point in rect
                     mCart.setBackgroundColor(this.getResources().getColor(R.color.blue2));
                 }
                 else{
@@ -360,7 +358,6 @@ public class ViewProductActivity extends AppCompatActivity implements
                 mCart.setBackground(this.getResources().getDrawable(R.drawable.blue_onclick_dark));
                 setDragMode(false);
                 return true;
-
             // An unknown action type was received.
             default:
                 Log.e(TAG,"Unknown action type received by OnStartDragListener.");

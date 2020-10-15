@@ -11,6 +11,10 @@ import java.util.ArrayList;
  * Created by User on 3/3/2018.
  */
 
+
+/**
+ * Adapter for managing list of fragments in the ViewPager
+ */
 public class ProductPagerAdapter extends FragmentStatePagerAdapter {
 
     private ArrayList<Fragment> mFragments = new ArrayList<>();

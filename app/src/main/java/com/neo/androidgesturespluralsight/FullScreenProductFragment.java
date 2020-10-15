@@ -16,9 +16,8 @@ import com.neo.androidgesturespluralsight.customviews.ScalingImageView;
 import com.neo.androidgesturespluralsight.models.Product;
 
 /**
- * Created by User on 3/3/2018.
+ * fragment to show the Scalable imageView in fullScreen
  */
-
 public class FullScreenProductFragment extends Fragment
 
 {
